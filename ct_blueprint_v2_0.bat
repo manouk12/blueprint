@@ -17,7 +17,7 @@ echo [*] Downloading AI Blueprint Pack from GitHub...
 echo.
 
 :: 2. Download ZIP from GitHub Repository (Secure TLS 1.2 Forced)
-powershell -NoProfile -ExecutionPolicy Bypass -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; try { Invoke-WebRequest -Uri 'https://github.com/manouk12/blueprint/archive/refs/heads/main.zip' -OutFile '$env:TEMP\blueprint_main.zip' -ErrorAction Stop; Write-Host 'Success: Master package downloaded.' -ForegroundColor Green; } catch { Write-Error 'Error: Failed to download from GitHub.'; exit 1; }"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; try { Invoke-WebRequest -Uri 'https://github.com/manouk12/blueprint/archive/refs/heads/main.zip' -OutFile '%TEMP%\blueprint_main.zip' -ErrorAction Stop; Write-Host 'Success: Master package downloaded.' -ForegroundColor Green; } catch { Write-Error 'Error: Failed to download from GitHub.'; exit 1; }"
 if %errorlevel% neq 0 (
     echo.
     echo [Error] Failed to download blueprint zip file.
@@ -27,7 +27,7 @@ if %errorlevel% neq 0 (
 
 :: 3. Extract Master Zip to Temp Directory
 echo [*] Extracting package...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "try { if (Test-Path '$env:TEMP\blueprint_temp') { Remove-Item -Path '$env:TEMP\blueprint_temp' -Recurse -Force | Out-Null }; Expand-Archive -Path '$env:TEMP\blueprint_main.zip' -DestinationPath '$env:TEMP\blueprint_temp' -Force -ErrorAction Stop; Write-Host 'Success: Extraction completed.' -ForegroundColor Green; } catch { Write-Error 'Error: Extraction failed.'; exit 1; }"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "try { if (Test-Path '%TEMP%\blueprint_temp') { Remove-Item -Path '%TEMP%\blueprint_temp' -Recurse -Force | Out-Null }; Expand-Archive -Path '%TEMP%\blueprint_main.zip' -DestinationPath '%TEMP%\blueprint_temp' -Force -ErrorAction Stop; Write-Host 'Success: Extraction completed.' -ForegroundColor Green; } catch { Write-Error 'Error: Extraction failed.'; exit 1; }"
 if %errorlevel% neq 0 (
     echo.
     echo [Error] Failed to extract blueprint package.
@@ -37,7 +37,7 @@ if %errorlevel% neq 0 (
 
 :: 4. Copy templates and scripts to project root
 echo [*] Injecting assets to your project...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "try { Copy-Item -Path '$env:TEMP\blueprint_temp\blueprint-main\templates' -Destination '%PROJECT_ROOT%' -Recurse -Force -ErrorAction Stop; Copy-Item -Path '$env:TEMP\blueprint_temp\blueprint-main\scripts' -Destination '%PROJECT_ROOT%' -Recurse -Force -ErrorAction Stop; Write-Host 'Success: Templates and scripts injected successfully.' -ForegroundColor Green; } catch { Write-Error 'Error: Failed to copy assets to project root.'; exit 1; }"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "try { Copy-Item -Path '%TEMP%\blueprint_temp\blueprint-main\templates' -Destination '%PROJECT_ROOT%' -Recurse -Force -ErrorAction Stop; Copy-Item -Path '%TEMP%\blueprint_temp\blueprint-main\scripts' -Destination '%PROJECT_ROOT%' -Recurse -Force -ErrorAction Stop; Write-Host 'Success: Templates and scripts injected successfully.' -ForegroundColor Green; } catch { Write-Error 'Error: Failed to copy assets to project root.'; exit 1; }"
 if %errorlevel% neq 0 (
     echo.
     echo [Error] Failed to copy template assets.
@@ -58,7 +58,7 @@ if %errorlevel% neq 0 (
 
 :: 6. Silent Cleanup Temp Assets
 echo [*] Cleaning up temporary files...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path '$env:TEMP\blueprint_main.zip' -Force -ErrorAction SilentlyContinue; Remove-Item -Path '$env:TEMP\blueprint_temp' -Recurse -Force -ErrorAction SilentlyContinue"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Path '%TEMP%\blueprint_main.zip' -Force -ErrorAction SilentlyContinue; Remove-Item -Path '%TEMP%\blueprint_temp' -Recurse -Force -ErrorAction SilentlyContinue"
 
 echo.
 echo =======================================================
